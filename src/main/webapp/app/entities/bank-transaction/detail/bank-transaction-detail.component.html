@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="bankTransaction">
+      <h2 data-cy="bankTransactionDetailsHeading"><span jhiTranslate="kataSgApp.bankTransaction.detail.title">Bank Transaction</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ bankTransaction.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="kataSgApp.bankTransaction.label">Label</span></dt>
+        <dd>
+          <span>{{ bankTransaction.label }}</span>
+        </dd>
+        <dt><span jhiTranslate="kataSgApp.bankTransaction.valueDate">Value Date</span></dt>
+        <dd>
+          <span>{{ bankTransaction.valueDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="kataSgApp.bankTransaction.amount">Amount</span></dt>
+        <dd>
+          <span>{{ bankTransaction.amount }}</span>
+        </dd>
+        <dt><span jhiTranslate="kataSgApp.bankTransaction.type">Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'kataSgApp.TransactionType.' + bankTransaction.type }}">{{ bankTransaction.type }}</span>
+        </dd>
+        <dt><span jhiTranslate="kataSgApp.bankTransaction.account">Account</span></dt>
+        <dd>
+          <div *ngIf="bankTransaction.account">
+            <a [routerLink]="['/bank-account', bankTransaction.account?.id, 'view']">{{ bankTransaction.account?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/bank-transaction', bankTransaction.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

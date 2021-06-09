@@ -1,0 +1,31 @@
+{
+  "name": "BankAccount",
+  "fields": [
+    {
+      "fieldName": "ownerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "position",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "bankTransaction",
+      "otherEntityRelationshipName": "account",
+      "relationshipName": "bankTransaction"
+    }
+  ],
+  "entityTableName": "bank_account",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210609182044"
+}

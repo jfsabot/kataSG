@@ -1,0 +1,28 @@
+{
+  "kataSgApp": {
+    "bankTransaction": {
+      "home": {
+        "title": "BankTransactions",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Bank Transaction",
+        "createOrEditLabel": "Créer ou éditer un Bank Transaction",
+        "notFound": "Aucun Bank Transaction trouvé"
+      },
+      "created": "Un nouveau Bank Transaction a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Bank Transaction avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Bank Transaction avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Bank Transaction {{ id }} ?"
+      },
+      "detail": {
+        "title": "Bank Transaction"
+      },
+      "id": "ID",
+      "label": "Label",
+      "valueDate": "Value Date",
+      "amount": "Amount",
+      "type": "Type",
+      "account": "Account"
+    }
+  }
+}

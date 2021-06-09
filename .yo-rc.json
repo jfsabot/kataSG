@@ -41,6 +41,8 @@
     "rememberMeKey": "6f74f58415c9ef9091b14f3cca46e28fa29ba0a828c8215adc64d4bf2a52008304e51752679235bd77ff912b53410639f6ae",
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
-    "languages": ["fr", "en"]
+    "languages": ["fr", "en"],
+    "entities": ["BankAccount", "BankTransaction"],
+    "lastLiquibaseTimestamp": 1623262845000
   }
 }

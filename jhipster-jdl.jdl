@@ -1,0 +1,25 @@
+
+
+entity BankAccount {
+	ownerName String
+    position BigDecimal
+}
+
+entity BankTransaction {
+	label 	String
+    valueDate LocalDate
+    amount	BigDecimal
+    type  TransactionType
+}
+
+enum TransactionType {
+    CREDIT, DEBIT
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+    BankAccount to BankTransaction{account}
+}
+
+
+
