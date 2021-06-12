@@ -32,8 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class BankAccountResourceIT {
 
-    private static final String DEFAULT_OWNER_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_OWNER_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_OWNER_LOGIN = "AAAAAAAAAA";
+    private static final String UPDATED_OWNER_LOGIN = "BBBBBBBBBB";
 
     private static final BigDecimal DEFAULT_POSITION = new BigDecimal(1);
     private static final BigDecimal UPDATED_POSITION = new BigDecimal(2);
@@ -62,7 +62,7 @@ class BankAccountResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static BankAccount createEntity(EntityManager em) {
-        BankAccount bankAccount = new BankAccount().ownerName(DEFAULT_OWNER_NAME).position(DEFAULT_POSITION);
+        BankAccount bankAccount = new BankAccount().ownerLogin(DEFAULT_OWNER_LOGIN).position(DEFAULT_POSITION);
         return bankAccount;
     }
 
@@ -73,7 +73,7 @@ class BankAccountResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static BankAccount createUpdatedEntity(EntityManager em) {
-        BankAccount bankAccount = new BankAccount().ownerName(UPDATED_OWNER_NAME).position(UPDATED_POSITION);
+        BankAccount bankAccount = new BankAccount().ownerLogin(UPDATED_OWNER_LOGIN).position(UPDATED_POSITION);
         return bankAccount;
     }
 
@@ -100,7 +100,7 @@ class BankAccountResourceIT {
         List<BankAccount> bankAccountList = bankAccountRepository.findAll();
         assertThat(bankAccountList).hasSize(databaseSizeBeforeCreate + 1);
         BankAccount testBankAccount = bankAccountList.get(bankAccountList.size() - 1);
-        assertThat(testBankAccount.getOwnerName()).isEqualTo(DEFAULT_OWNER_NAME);
+        assertThat(testBankAccount.getOwnerLogin()).isEqualTo(DEFAULT_OWNER_LOGIN);
         assertThat(testBankAccount.getPosition()).isEqualByComparingTo(DEFAULT_POSITION);
     }
 
@@ -139,7 +139,7 @@ class BankAccountResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(bankAccount.getId().intValue())))
-            .andExpect(jsonPath("$.[*].ownerName").value(hasItem(DEFAULT_OWNER_NAME)))
+            .andExpect(jsonPath("$.[*].ownerLogin").value(hasItem(DEFAULT_OWNER_LOGIN)))
             .andExpect(jsonPath("$.[*].position").value(hasItem(sameNumber(DEFAULT_POSITION))));
     }
 
@@ -155,7 +155,7 @@ class BankAccountResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(bankAccount.getId().intValue()))
-            .andExpect(jsonPath("$.ownerName").value(DEFAULT_OWNER_NAME))
+            .andExpect(jsonPath("$.ownerLogin").value(DEFAULT_OWNER_LOGIN))
             .andExpect(jsonPath("$.position").value(sameNumber(DEFAULT_POSITION)));
     }
 
@@ -178,7 +178,7 @@ class BankAccountResourceIT {
         BankAccount updatedBankAccount = bankAccountRepository.findById(bankAccount.getId()).get();
         // Disconnect from session so that the updates on updatedBankAccount are not directly saved in db
         em.detach(updatedBankAccount);
-        updatedBankAccount.ownerName(UPDATED_OWNER_NAME).position(UPDATED_POSITION);
+        updatedBankAccount.ownerLogin(UPDATED_OWNER_LOGIN).position(UPDATED_POSITION);
 
         restBankAccountMockMvc
             .perform(
@@ -193,7 +193,7 @@ class BankAccountResourceIT {
         List<BankAccount> bankAccountList = bankAccountRepository.findAll();
         assertThat(bankAccountList).hasSize(databaseSizeBeforeUpdate);
         BankAccount testBankAccount = bankAccountList.get(bankAccountList.size() - 1);
-        assertThat(testBankAccount.getOwnerName()).isEqualTo(UPDATED_OWNER_NAME);
+        assertThat(testBankAccount.getOwnerLogin()).isEqualTo(UPDATED_OWNER_LOGIN);
         assertThat(testBankAccount.getPosition()).isEqualTo(UPDATED_POSITION);
     }
 
@@ -287,7 +287,7 @@ class BankAccountResourceIT {
         List<BankAccount> bankAccountList = bankAccountRepository.findAll();
         assertThat(bankAccountList).hasSize(databaseSizeBeforeUpdate);
         BankAccount testBankAccount = bankAccountList.get(bankAccountList.size() - 1);
-        assertThat(testBankAccount.getOwnerName()).isEqualTo(DEFAULT_OWNER_NAME);
+        assertThat(testBankAccount.getOwnerLogin()).isEqualTo(DEFAULT_OWNER_LOGIN);
         assertThat(testBankAccount.getPosition()).isEqualByComparingTo(UPDATED_POSITION);
     }
 
@@ -303,7 +303,7 @@ class BankAccountResourceIT {
         BankAccount partialUpdatedBankAccount = new BankAccount();
         partialUpdatedBankAccount.setId(bankAccount.getId());
 
-        partialUpdatedBankAccount.ownerName(UPDATED_OWNER_NAME).position(UPDATED_POSITION);
+        partialUpdatedBankAccount.ownerLogin(UPDATED_OWNER_LOGIN).position(UPDATED_POSITION);
 
         restBankAccountMockMvc
             .perform(
@@ -318,7 +318,7 @@ class BankAccountResourceIT {
         List<BankAccount> bankAccountList = bankAccountRepository.findAll();
         assertThat(bankAccountList).hasSize(databaseSizeBeforeUpdate);
         BankAccount testBankAccount = bankAccountList.get(bankAccountList.size() - 1);
-        assertThat(testBankAccount.getOwnerName()).isEqualTo(UPDATED_OWNER_NAME);
+        assertThat(testBankAccount.getOwnerLogin()).isEqualTo(UPDATED_OWNER_LOGIN);
         assertThat(testBankAccount.getPosition()).isEqualByComparingTo(UPDATED_POSITION);
     }
 

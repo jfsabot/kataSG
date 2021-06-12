@@ -22,7 +22,7 @@ describe('Service Tests', () => {
 
       elemDefault = {
         id: 0,
-        ownerName: 'AAAAAAA',
+        ownerLogin: 'AAAAAAA',
         position: 0,
       };
     });
@@ -59,7 +59,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            ownerName: 'BBBBBB',
+            ownerLogin: 'BBBBBB',
             position: 1,
           },
           elemDefault
@@ -97,7 +97,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            ownerName: 'BBBBBB',
+            ownerLogin: 'BBBBBB',
             position: 1,
           },
           elemDefault

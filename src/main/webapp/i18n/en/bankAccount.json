@@ -18,7 +18,7 @@
         "title": "Bank Account"
       },
       "id": "ID",
-      "ownerName": "Owner Name",
+      "ownerLogin": "Owner Login",
       "position": "Position",
       "bankTransaction": "Bank Transaction"
     }

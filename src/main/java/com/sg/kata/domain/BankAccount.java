@@ -21,8 +21,8 @@ public class BankAccount implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "owner_name")
-    private String ownerName;
+    @Column(name = "owner_login")
+    private String ownerLogin;
 
     @Column(name = "position", precision = 21, scale = 2)
     private BigDecimal position;
@@ -45,17 +45,17 @@ public class BankAccount implements Serializable {
         return this;
     }
 
-    public String getOwnerName() {
-        return this.ownerName;
+    public String getOwnerLogin() {
+        return this.ownerLogin;
     }
 
-    public BankAccount ownerName(String ownerName) {
-        this.ownerName = ownerName;
+    public BankAccount ownerLogin(String ownerLogin) {
+        this.ownerLogin = ownerLogin;
         return this;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setOwnerLogin(String ownerLogin) {
+        this.ownerLogin = ownerLogin;
     }
 
     public BigDecimal getPosition() {
@@ -126,7 +126,7 @@ public class BankAccount implements Serializable {
     public String toString() {
         return "BankAccount{" +
             "id=" + getId() +
-            ", ownerName='" + getOwnerName() + "'" +
+            ", ownerLogin='" + getOwnerLogin() + "'" +
             ", position=" + getPosition() +
             "}";
     }

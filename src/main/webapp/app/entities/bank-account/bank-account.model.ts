@@ -2,7 +2,7 @@ import { IBankTransaction } from 'app/entities/bank-transaction/bank-transaction
 
 export interface IBankAccount {
   id?: number;
-  ownerName?: string | null;
+  ownerLogin?: string | null;
   position?: number | null;
   bankTransactions?: IBankTransaction[] | null;
 }
@@ -10,7 +10,7 @@ export interface IBankAccount {
 export class BankAccount implements IBankAccount {
   constructor(
     public id?: number,
-    public ownerName?: string | null,
+    public ownerLogin?: string | null,
     public position?: number | null,
     public bankTransactions?: IBankTransaction[] | null
   ) {}

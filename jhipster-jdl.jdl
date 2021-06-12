@@ -1,7 +1,7 @@
 
 
 entity BankAccount {
-	ownerName String
+	ownerLogin String
     position BigDecimal
 }
 

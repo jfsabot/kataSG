@@ -17,7 +17,7 @@ export class BankAccountUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    ownerName: [],
+    ownerLogin: [],
     position: [],
   });
 
@@ -65,7 +65,7 @@ export class BankAccountUpdateComponent implements OnInit {
   protected updateForm(bankAccount: IBankAccount): void {
     this.editForm.patchValue({
       id: bankAccount.id,
-      ownerName: bankAccount.ownerName,
+      ownerLogin: bankAccount.ownerLogin,
       position: bankAccount.position,
     });
   }
@@ -74,7 +74,7 @@ export class BankAccountUpdateComponent implements OnInit {
     return {
       ...new BankAccount(),
       id: this.editForm.get(['id'])!.value,
-      ownerName: this.editForm.get(['ownerName'])!.value,
+      ownerLogin: this.editForm.get(['ownerLogin'])!.value,
       position: this.editForm.get(['position'])!.value,
     };
   }

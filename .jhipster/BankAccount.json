@@ -2,7 +2,7 @@
   "name": "BankAccount",
   "fields": [
     {
-      "fieldName": "ownerName",
+      "fieldName": "ownerLogin",
       "fieldType": "String"
     },
     {

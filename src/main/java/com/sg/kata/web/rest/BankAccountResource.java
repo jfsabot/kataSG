@@ -124,8 +124,8 @@ public class BankAccountResource {
             .findById(bankAccount.getId())
             .map(
                 existingBankAccount -> {
-                    if (bankAccount.getOwnerName() != null) {
-                        existingBankAccount.setOwnerName(bankAccount.getOwnerName());
+                    if (bankAccount.getOwnerLogin() != null) {
+                        existingBankAccount.setOwnerLogin(bankAccount.getOwnerLogin());
                     }
                     if (bankAccount.getPosition() != null) {
                         existingBankAccount.setPosition(bankAccount.getPosition());

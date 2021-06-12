@@ -33,7 +33,7 @@
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
-          <th scope="col"><span jhiTranslate="kataSgApp.bankAccount.ownerName">Owner Name</span></th>
+          <th scope="col"><span jhiTranslate="kataSgApp.bankAccount.ownerLogin">Owner Login</span></th>
           <th scope="col"><span jhiTranslate="kataSgApp.bankAccount.position">Position</span></th>
           <th scope="col"></th>
         </tr>
@@ -43,7 +43,7 @@
           <td>
             <a [routerLink]="['/bank-account', bankAccount.id, 'view']">{{ bankAccount.id }}</a>
           </td>
-          <td>{{ bankAccount.ownerName }}</td>
+          <td>{{ bankAccount.ownerLogin }}</td>
           <td>{{ bankAccount.position }}</td>
           <td class="text-right">
             <div class="btn-group">

@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -26,7 +27,7 @@ public class UserStepDefs extends StepDefs {
 
     @When("I search user {string}")
     public void i_search_user(String userId) throws Throwable {
-        actions = restUserMockMvc.perform(get("/api/users/" + userId).accept(MediaType.APPLICATION_JSON));
+        actions = restUserMockMvc.perform(get("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON));
     }
 
     @Then("the user is found")
