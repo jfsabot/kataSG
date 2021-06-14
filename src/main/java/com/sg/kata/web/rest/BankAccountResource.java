@@ -2,12 +2,11 @@ package com.sg.kata.web.rest;
 
 import com.sg.kata.domain.BankAccount;
 import com.sg.kata.repository.BankAccountRepository;
+import com.sg.kata.security.SecurityUtils;
 import com.sg.kata.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -143,14 +142,21 @@ public class BankAccountResource {
     }
 
     /**
-     * {@code GET  /bank-accounts} : get all the bankAccounts.
+     * {@code GET  /bank-accounts} : get all the bankAccounts for current user
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of bankAccounts in body.
      */
     @GetMapping("/bank-accounts")
     public List<BankAccount> getAllBankAccounts() {
-        log.debug("REST request to get all BankAccounts");
-        return bankAccountRepository.findAll();
+        log.debug("REST request to get all BankAccounts for current user");
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (SecurityUtils.isAuthenticated() && currentUserLogin.isPresent()) {
+            if (SecurityUtils.hasCurrentUserThisAuthority("ADMIN")) {
+                return bankAccountRepository.findAll();
+            }
+            return Collections.singletonList(bankAccountRepository.findBankAccountByOwnerLogin(currentUserLogin.get()));
+        }
+        return new ArrayList<>();
     }
 
     /**

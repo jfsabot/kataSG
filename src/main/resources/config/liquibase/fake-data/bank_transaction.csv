@@ -1,11 +1,11 @@
-id;label;value_date;amount;type
-1;a;2021-06-08;6097;DEBIT
-2;Concrete;2021-06-08;76305;CREDIT
-3;la a yellow;2021-06-09;5942;CREDIT
-4;Computers;2021-06-09;9574;DEBIT
-5;Manat generating Buckinghamshire;2021-06-09;95581;DEBIT
-6;Handcrafted;2021-06-09;60803;CREDIT
-7;Loan b Peso;2021-06-09;86581;DEBIT
-8;collaborative;2021-06-09;95082;DEBIT
-9;a a;2021-06-09;16674;CREDIT
-10;du;2021-06-09;26213;CREDIT
+id;label;value_date;amount;type;account_id
+1;Electricity;2021-06-08;-60.97;DEBIT;1
+2;Salary;2021-06-08;2305;CREDIT;1
+3;Loan;2021-06-09;5942;CREDIT;1
+4;Computers;2021-06-09;-574.50;DEBIT;1
+5;Food;2021-06-09;155.81;DEBIT;1
+6;Handcraft gift;2021-06-09;-608.03;DEBIT;1
+7;Box internet;2021-06-09;65.81;DEBIT;1
+8;Restaurant;2021-06-09;52.10;DEBIT;1
+9;Holidays booking;2021-06-09;1664.74;DEBIT;1
+10;Health care;2021-06-09;26213;CREDIT;1

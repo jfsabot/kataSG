@@ -35,6 +35,7 @@ public class BankAccountService {
             throw new BankAccountNotFoundException("Bank account with owner login '" + accountOwner + "' not found");
         }
         BankTransaction bankTransaction = new BankTransaction();
+        bankTransaction.setLabel("Deposit");
         bankTransaction.setAccount(bankAccount);
         bankTransaction.setAmount(amount.setScale(2, RoundingMode.HALF_EVEN));
         bankTransaction.setType(TransactionType.CREDIT);
@@ -51,6 +52,7 @@ public class BankAccountService {
             throw new BankAccountNotFoundException("Bank account with owner login '" + accountOwner + "' not found");
         }
         BankTransaction bankTransaction = new BankTransaction();
+        bankTransaction.setLabel("Withdrawal");
         bankTransaction.setAccount(bankAccount);
         bankTransaction.setAmount(amount.negate().setScale(2, RoundingMode.HALF_EVEN));
         bankTransaction.setType(TransactionType.DEBIT);

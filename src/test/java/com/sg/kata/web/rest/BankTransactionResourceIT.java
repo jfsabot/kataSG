@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.sg.kata.IntegrationTest;
+import com.sg.kata.domain.BankAccount;
 import com.sg.kata.domain.BankTransaction;
 import com.sg.kata.domain.enumeration.TransactionType;
 import com.sg.kata.repository.BankTransactionRepository;
@@ -94,9 +95,16 @@ class BankTransactionResourceIT {
         return bankTransaction;
     }
 
+    public static BankAccount persistBankAccount(EntityManager em) {
+        BankAccount bankAccount = new BankAccount().ownerLogin("user").position(BigDecimal.valueOf(500));
+        em.persist(bankAccount);
+        return bankAccount;
+    }
+
     @BeforeEach
     public void initTest() {
         bankTransaction = createEntity(em);
+        persistBankAccount(em);
     }
 
     @Test
@@ -121,6 +129,44 @@ class BankTransactionResourceIT {
         assertThat(testBankTransaction.getValueDate()).isEqualTo(DEFAULT_VALUE_DATE);
         assertThat(testBankTransaction.getAmount()).isEqualByComparingTo(DEFAULT_AMOUNT);
         assertThat(testBankTransaction.getType()).isEqualTo(DEFAULT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void makeDeposit() throws Exception {
+        int databaseSizeBeforeCreate = bankTransactionRepository.findAll().size();
+        // Make a new deposit
+        restBankTransactionMockMvc
+            .perform(post("/api/deposit").with(csrf()).contentType(MediaType.APPLICATION_JSON).param("amount", "200"))
+            .andExpect(status().isCreated());
+
+        // Validate the deposit generated a new BankTransaction in the database
+        List<BankTransaction> bankTransactionList = bankTransactionRepository.findAll();
+        assertThat(bankTransactionList).hasSize(databaseSizeBeforeCreate + 1);
+        BankTransaction testBankTransaction = bankTransactionList.get(bankTransactionList.size() - 1);
+        assertThat(testBankTransaction.getLabel()).isEqualTo("Deposit");
+        assertThat(testBankTransaction.getValueDate().atStartOfDay()).isEqualTo(LocalDate.now().atStartOfDay());
+        assertThat(testBankTransaction.getAmount()).isEqualByComparingTo("200");
+        assertThat(testBankTransaction.getType()).isEqualTo(TransactionType.CREDIT);
+    }
+
+    @Test
+    @Transactional
+    void makeWithdrawal() throws Exception {
+        int databaseSizeBeforeCreate = bankTransactionRepository.findAll().size();
+        // Make a new deposit
+        restBankTransactionMockMvc
+            .perform(post("/api/withdrawal").with(csrf()).contentType(MediaType.APPLICATION_JSON).param("amount", "150"))
+            .andExpect(status().isCreated());
+
+        // Validate the deposit generated a new BankTransaction in the database
+        List<BankTransaction> bankTransactionList = bankTransactionRepository.findAll();
+        assertThat(bankTransactionList).hasSize(databaseSizeBeforeCreate + 1);
+        BankTransaction testBankTransaction = bankTransactionList.get(bankTransactionList.size() - 1);
+        assertThat(testBankTransaction.getLabel()).isEqualTo("Withdrawal");
+        assertThat(testBankTransaction.getValueDate().atStartOfDay()).isEqualTo(LocalDate.now().atStartOfDay());
+        assertThat(testBankTransaction.getAmount()).isEqualByComparingTo("-150");
+        assertThat(testBankTransaction.getType()).isEqualTo(TransactionType.DEBIT);
     }
 
     @Test

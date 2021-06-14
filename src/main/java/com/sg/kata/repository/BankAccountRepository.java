@@ -10,5 +10,8 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
+    /*
+    Assume there is one account per user
+     */
     BankAccount findBankAccountByOwnerLogin(String ownerLogin);
 }

@@ -1,10 +1,17 @@
 package com.sg.kata.web.rest;
 
+import com.sg.kata.domain.BankAccount;
 import com.sg.kata.domain.BankTransaction;
+import com.sg.kata.repository.BankAccountRepository;
 import com.sg.kata.repository.BankTransactionRepository;
+import com.sg.kata.security.SecurityUtils;
+import com.sg.kata.service.BankAccountNotFoundException;
+import com.sg.kata.service.BankAccountService;
 import com.sg.kata.web.rest.errors.BadRequestAlertException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,8 +41,18 @@ public class BankTransactionResource {
 
     private final BankTransactionRepository bankTransactionRepository;
 
-    public BankTransactionResource(BankTransactionRepository bankTransactionRepository) {
+    private final BankAccountRepository bankAccountRepository;
+
+    private final BankAccountService bankAccountService;
+
+    public BankTransactionResource(
+        BankTransactionRepository bankTransactionRepository,
+        BankAccountRepository bankAccountRepository,
+        BankAccountService bankAccountService
+    ) {
         this.bankTransactionRepository = bankTransactionRepository;
+        this.bankAccountRepository = bankAccountRepository;
+        this.bankAccountService = bankAccountService;
     }
 
     /**
@@ -52,6 +69,53 @@ public class BankTransactionResource {
             throw new BadRequestAlertException("A new bankTransaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
         BankTransaction result = bankTransactionRepository.save(bankTransaction);
+        return ResponseEntity
+            .created(new URI("/api/bank-transactions/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code POST  /deposit} : Create a new deposit.
+     *
+     * @param amount the deposit amount
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new bankTransaction, or with status {@code 400 (Bad Request)} if the bankTransaction has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/deposit")
+    public ResponseEntity<BankTransaction> makeDeposit(@RequestParam(name = "amount") Double amount)
+        throws URISyntaxException, BankAccountNotFoundException {
+        log.debug("REST request to make a deposit by current user : {}", amount);
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (!SecurityUtils.isAuthenticated() || currentUserLogin.isEmpty()) {
+            throw new BadRequestAlertException("You must be authenticated to deposit", ENTITY_NAME, "not_authenticated");
+        }
+        BankTransaction result = bankAccountService.makeDeposit(SecurityUtils.getCurrentUserLogin().get(), BigDecimal.valueOf(amount));
+        return ResponseEntity
+            .created(new URI("/api/bank-transactions/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code POST  /withdrawal} : Create a new withdrawal.
+     *
+     * @param amount the withdrawal amount
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new bankTransaction, or with status {@code 400 (Bad Request)} if the bankTransaction has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/withdrawal")
+    public ResponseEntity<BankTransaction> makeWithdrawal(@RequestParam(name = "amount") Double amount)
+        throws URISyntaxException, BankAccountNotFoundException {
+        log.debug("REST request to make a withdrawal by current user : {}", amount);
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (!SecurityUtils.isAuthenticated() || currentUserLogin.isEmpty()) {
+            throw new BadRequestAlertException("You must be authenticated to make a withdrawal", ENTITY_NAME, "not_authenticated");
+        }
+        BankTransaction result = bankAccountService.makeWithdrawal(
+            SecurityUtils.getCurrentUserLogin().get(),
+            BigDecimal.valueOf(amount).abs()
+        );
         return ResponseEntity
             .created(new URI("/api/bank-transactions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -149,14 +213,22 @@ public class BankTransactionResource {
     }
 
     /**
-     * {@code GET  /bank-transactions} : get all the bankTransactions.
+     * {@code GET  /bank-transactions} : get all the bankTransactions for current user account.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of bankTransactions in body.
      */
     @GetMapping("/bank-transactions")
     public List<BankTransaction> getAllBankTransactions() {
-        log.debug("REST request to get all BankTransactions");
-        return bankTransactionRepository.findAll();
+        log.debug("REST request to get all BankTransactions for current user account");
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (SecurityUtils.isAuthenticated() && currentUserLogin.isPresent()) {
+            if (SecurityUtils.hasCurrentUserThisAuthority("ADMIN")) {
+                return bankTransactionRepository.findAll();
+            }
+            BankAccount bankAccount = bankAccountRepository.findBankAccountByOwnerLogin(currentUserLogin.get());
+            return bankTransactionRepository.findAllByAccountOrderByValueDateDesc(bankAccount);
+        }
+        return new ArrayList<>();
     }
 
     /**
